@@ -14,12 +14,15 @@
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
+    "@tanstack/react-router": "^1.31.1",
     "add": "^2.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "yarn": "^1.22.22"
   },
   "devDependencies": {
+    "@tanstack/router-devtools": "^1.31.1",
+    "@tanstack/router-vite-plugin": "^1.30.0",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
