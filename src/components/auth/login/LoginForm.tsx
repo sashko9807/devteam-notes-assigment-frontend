@@ -46,6 +46,7 @@ export default function LoginForm() {
         label={"Password"}
         variant="outlined"
         fullWidth
+        type="password"
         error={Boolean(errors.password)}
         errorMsg={errors.password}
         {...register("password")}
