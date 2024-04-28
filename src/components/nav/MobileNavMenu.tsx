@@ -6,23 +6,12 @@ import {
 } from "./styled/MobileNavMenu.styled";
 import { Close } from "@mui/icons-material";
 import StyledNavLink from "./StyledNavLink";
-import { useRouter } from "@tanstack/react-router";
-import { useEffect } from "react";
 
 type MobileNavProps = {
   open: boolean;
   menuToggle: () => void;
 };
 export default function MobileNav({ open, menuToggle }: MobileNavProps) {
-  const router = useRouter();
-  useEffect(() => {
-    const unsubscribe = router.subscribe("onBeforeLoad", () => {
-      if (open) {
-        menuToggle();
-      }
-    });
-    return unsubscribe;
-  }, [open]);
   return (
     <MobileNavMenuStyled>
       <Grid className={classes.container}>
@@ -70,19 +59,19 @@ export default function MobileNav({ open, menuToggle }: MobileNavProps) {
               component={"ul"}
               sx={{ padding: 0 }}
             >
-              <MobileNavMenuItem item>
+              <MobileNavMenuItem item onClick={menuToggle}>
                 <StyledNavLink to={"/dashboard"}>
                   <Typography className={classes.itemText}>
                     Dashboard
                   </Typography>
                 </StyledNavLink>
               </MobileNavMenuItem>
-              <MobileNavMenuItem item>
+              <MobileNavMenuItem item onClick={menuToggle}>
                 <StyledNavLink to={"/login"}>
                   <Typography className={classes.itemText}>Login</Typography>
                 </StyledNavLink>
               </MobileNavMenuItem>
-              <MobileNavMenuItem item>
+              <MobileNavMenuItem item onClick={menuToggle}>
                 <StyledNavLink to={"/register"}>
                   <Typography className={classes.itemText}>Register</Typography>
                 </StyledNavLink>
