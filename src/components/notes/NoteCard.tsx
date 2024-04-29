@@ -28,7 +28,13 @@ export default function NoteCard({
 
   return (
     <Card
-      sx={{ position: "relative", height: "100%", width: "100%", tabIndex: 0 }}
+      sx={{
+        position: "relative",
+        height: "100%",
+        width: "100%",
+        tabIndex: 0,
+        backgroundColor: "lightgray",
+      }}
       component={"article"}
     >
       <CardContent>

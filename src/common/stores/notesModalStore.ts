@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { NoteResponse } from "../hooks/notes";
-import { shallow } from "zustand/shallow";
+
 import { useShallow } from "zustand/react/shallow";
 
 type NoteModalActions = {

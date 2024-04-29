@@ -31,7 +31,7 @@ export default function NotesList({ notes }: NoteListProps) {
           component={"li"}
           key={note.id}
           xs={12}
-          md={2}
+          md={2.5}
           sx={{ listStyle: "none" }}
         >
           <NotesCard
