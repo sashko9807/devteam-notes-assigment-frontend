@@ -16,7 +16,7 @@ function DashboardPage() {
   const notes = notesQuery.data.data;
 
   return (
-    <Grid container direction="column" spacing={2}>
+    <Grid container direction="column" spacing={2} py={5} px={6}>
       <Grid container item direction={"column"}>
         <Typography component={"h1"} variant="h2">
           My notes

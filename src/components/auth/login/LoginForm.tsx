@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import zod, { z } from "zod";
 import FormInput from "../../common/inputs/FormField";
 import { useLoginMutation } from "../../../common/hooks/auth";
+import { useRouter } from "@tanstack/react-router";
 const loginSchema = zod.object({
   email: zod
     .string()
@@ -22,10 +23,15 @@ export default function LoginForm() {
   } = useForm<LoginInput>({ resolver: zodResolver(loginSchema) });
 
   const loginMutation = useLoginMutation();
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<LoginInput> = async (data, event) => {
     event?.preventDefault();
-    loginMutation.mutate(data);
+    const result = await loginMutation.mutateAsync(data);
+
+    if (result.status === 200) {
+      router.navigate({ to: "/dashboard" });
+    }
   };
   return (
     <Grid
