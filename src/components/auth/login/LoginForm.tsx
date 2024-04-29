@@ -30,19 +30,18 @@ export default function LoginForm() {
   return (
     <Grid
       container
+      item
       component={"form"}
       onSubmit={handleSubmit(onSubmit)}
       direction={"column"}
       gap={2}
-      xs={12}
-      md={4}
     >
       <FormInput
         label={"Email"}
         variant="outlined"
         fullWidth
         error={Boolean(errors.email)}
-        errorMsg={errors.email}
+        fielderror={errors.email}
         {...register("email")}
       />
       <FormInput
@@ -51,12 +50,14 @@ export default function LoginForm() {
         fullWidth
         type="password"
         error={Boolean(errors.password)}
-        errorMsg={errors.password}
+        fielderror={errors.password}
         {...register("password")}
       />
-      <Button type="submit" variant="contained" fullWidth>
-        Login
-      </Button>
+      <Grid item>
+        <Button type="submit" variant="contained" fullWidth>
+          Login
+        </Button>
+      </Grid>
     </Grid>
   );
 }

@@ -4,9 +4,9 @@ import { shallow } from "zustand/shallow";
 import { useShallow } from "zustand/react/shallow";
 
 type NoteModalActions = {
-  toggleDelete: (note: NoteResponse) => void;
-  toggleUpdate: (note: NoteResponse) => void;
-  toggleCreate: (note: NoteResponse) => void;
+  toggleDelete: () => void;
+  toggleCreate: () => void;
+  setSelectedNote: (note: NoteResponse) => void;
 };
 
 type NoteModalStore = {
@@ -31,25 +31,23 @@ const noteModalStore = create<NoteModalStore>((set) => ({
   selectedNote: initialNote,
   actions: {
     toggleCreate: () => {
-      set((state) => ({ createModal: !state.createModal }));
-    },
-    toggleDelete(note) {
       set((state) => {
-        const onClose = !state;
+        const isClosing = !state.createModal;
         return {
-          selectedNote: onClose ? initialNote : note,
+          selectedNote: isClosing ? state.selectedNote : initialNote,
+          createModal: !state.createModal,
+        };
+      });
+    },
+    toggleDelete() {
+      set((state) => {
+        return {
           deleteModal: !state.deleteModal,
         };
       });
     },
-    toggleUpdate(note) {
-      set((state) => {
-        const onClose = !state;
-        return {
-          selectedNote: onClose ? initialNote : note,
-          editModal: !state.editModal,
-        };
-      });
+    setSelectedNote(note) {
+      set(() => ({ selectedNote: note }));
     },
   },
 }));
@@ -69,11 +67,9 @@ export const useCreateNoteDialogStore = () =>
       toggleFn: state.actions.toggleCreate,
     }))
   );
-export const useEditNoteDialogStore = () =>
-  noteModalStore(
-    useShallow((state) => ({
-      open: state.createModal,
-      toggleFn: state.actions.toggleCreate,
-      note: state.selectedNote,
-    }))
-  );
+
+export const useSelectNoteAaction = () =>
+  noteModalStore((state) => state.actions.setSelectedNote);
+
+export const useSelectedNote = () =>
+  noteModalStore((state) => state.selectedNote);

@@ -5,7 +5,6 @@ const LoginPage = () => {
   return (
     <Grid
       container
-      item
       justifyContent={"center"}
       direction={"column"}
       alignItems={"center"}
@@ -15,7 +14,11 @@ const LoginPage = () => {
       <Typography variant="h3" component={"h1"}>
         Login
       </Typography>
-      <LoginForm />
+      <Grid container justifyContent={"center"}>
+        <Grid container item gap={2} xs={12} md={6}>
+          <LoginForm />
+        </Grid>
+      </Grid>
     </Grid>
   );
 };

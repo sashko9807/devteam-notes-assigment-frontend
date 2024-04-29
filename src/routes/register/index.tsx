@@ -17,7 +17,11 @@ function RegisterPage() {
       <Typography variant="h3" component={"h1"}>
         Register
       </Typography>
-      <RegisterForm />
+      <Grid container justifyContent={"center"}>
+        <Grid container item gap={2} xs={12} md={6}>
+          <RegisterForm />
+        </Grid>
+      </Grid>
     </Grid>
   );
 }

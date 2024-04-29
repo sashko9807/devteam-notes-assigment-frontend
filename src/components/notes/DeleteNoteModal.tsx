@@ -14,33 +14,30 @@ import {
 } from "../../common/hooks/notes";
 import { useAccessToken } from "../../common/stores/authStore";
 import { useRouter } from "@tanstack/react-router";
+import {
+  useDeleteNoteDialogStore,
+  useSelectedNote,
+} from "../../common/stores/notesModalStore";
 
-type DeleteNoteDialog = {
-  open: boolean;
-  onClose: (note: NoteResponse) => void;
-  note: NoteResponse;
-};
-export default function DeleteNoteModal({
-  open,
-  onClose,
-  note,
-}: DeleteNoteDialog) {
+export default function DeleteNoteModal() {
   const deleteNoteMutation = useDeleteNote();
   const router = useRouter();
   const accessToken = useAccessToken();
+  const deleteModalStore = useDeleteNoteDialogStore();
+  const selectedNote = useSelectedNote();
   function deleteNote() {
     const data: DeleteMutation = {
-      noteId: note.id,
+      noteId: selectedNote.id,
       accessToken: accessToken,
     };
     deleteNoteMutation.mutate(data);
     router.invalidate();
-    onClose(note);
+    deleteModalStore.toggleFn();
   }
   return (
     <Dialog
-      open={open}
-      onClose={() => onClose(note)}
+      open={deleteModalStore.open}
+      onClose={() => deleteModalStore.toggleFn()}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
       sx={{
@@ -63,11 +60,11 @@ export default function DeleteNoteModal({
       <DialogTitle id="alert-dialog-title">Delete note?</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          {note.title}
+          {selectedNote.title}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onClose(note)} color="primary">
+        <Button onClick={() => deleteModalStore.toggleFn()} color="primary">
           Cancel
         </Button>
         <Button color="primary" autoFocus onClick={() => deleteNote()}>

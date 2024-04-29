@@ -7,17 +7,34 @@ type NoteCardProps = {
   note: NoteResponse;
   onEdit: (note: NoteResponse) => void;
   onDelete: (note: NoteResponse) => void;
+  selectNote: (note: NoteResponse) => void;
 };
 
-export default function Note({ note, onEdit, onDelete }: NoteCardProps) {
+export default function NoteCard({
+  note,
+  onEdit,
+  onDelete,
+  selectNote,
+}: NoteCardProps) {
+  const handleDelete = () => {
+    selectNote(note);
+    onDelete(note);
+  };
+
+  const handleEdit = () => {
+    selectNote(note);
+    onEdit(note);
+  };
+
   return (
     <Card
-      sx={{ position: "relative", height: "100%", width: "100%" }}
+      sx={{ position: "relative", height: "100%", width: "100%", tabIndex: 0 }}
       component={"article"}
     >
       <CardContent>
         <IconButton
           aria-label="edit"
+          onClick={handleEdit}
           sx={{
             position: "absolute",
             top: ".4em",
@@ -32,7 +49,6 @@ export default function Note({ note, onEdit, onDelete }: NoteCardProps) {
             },
           }}
           style={{ right: "1.8em" }}
-          onClick={() => onEdit(note)}
         >
           <Edit fontSize="small" color="success" />
         </IconButton>
@@ -53,29 +69,24 @@ export default function Note({ note, onEdit, onDelete }: NoteCardProps) {
             },
           }}
           style={{ right: ".2em" }}
-          onClick={() => onDelete(note)}
+          onClick={handleDelete}
           type="button"
         >
           <Delete color="error" fontSize="small" />
         </IconButton>
 
-        <Typography component={"h2"} gutterBottom>
+        <Typography
+          component={"h2"}
+          sx={{ wordBreak: "break-word", width: 130 }}
+        >
           {note.title}
         </Typography>
 
-        <Typography
-          variant="body2"
-          component="p"
-          //   className={classes.noteDescription}
-        >
+        <Typography variant="body2" component="p">
           {note.content}
         </Typography>
 
-        <Typography
-          variant="body1"
-          component="div"
-          //   className={classes.noteDate}
-        >
+        <Typography variant="body1" component="div">
           {DateFormatter(note.createdAt)}
         </Typography>
       </CardContent>

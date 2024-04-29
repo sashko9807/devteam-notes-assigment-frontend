@@ -7,7 +7,6 @@ import { apiClient, authConfig } from "../../api/apiClient";
 import { endpoints } from "../apiEndpoints";
 
 import { AxiosError, AxiosResponse } from "axios";
-import { authStore, useAccessToken, useAuth } from "../stores/authStore";
 
 export type NoteResponse = {
   id: string;
@@ -49,6 +48,60 @@ export const useDeleteNote = () => {
 
   return useMutation<AxiosResponse, AxiosError, DeleteMutation>({
     mutationFn: deleteNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+    },
+  });
+};
+
+export type CreateNoteVariables = {
+  id: string;
+  title: string;
+  content: string;
+  accessToken: string;
+};
+async function createNote(data: CreateNoteVariables) {
+  const { accessToken, ...noteData } = data;
+
+  return await apiClient.post(
+    endpoints.notes.create.url,
+    noteData,
+    authConfig(accessToken)
+  );
+}
+
+async function updateNote(data: CreateNoteVariables) {
+  const { accessToken, ...noteData } = data;
+
+  return await apiClient.put(
+    endpoints.notes.update(noteData.id).url,
+    noteData,
+    authConfig(accessToken)
+  );
+}
+
+export const useCreateNoteMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<
+    AxiosResponse<NoteResponse>,
+    AxiosError,
+    CreateNoteVariables
+  >({
+    mutationFn: createNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+    },
+  });
+};
+
+export const useUpdateNoteMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation<
+    AxiosResponse<NoteResponse>,
+    AxiosError,
+    CreateNoteVariables
+  >({
+    mutationFn: updateNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
     },

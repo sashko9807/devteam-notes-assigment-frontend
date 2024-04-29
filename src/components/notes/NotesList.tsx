@@ -1,10 +1,11 @@
 import { Grid } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import NotesCard from "./NotesCard";
+
+import NotesCard from "./NoteCard";
 import { NoteResponse } from "../../common/hooks/notes";
 import {
+  useCreateNoteDialogStore,
   useDeleteNoteDialogStore,
-  useEditNoteDialogStore,
+  useSelectNoteAaction,
 } from "../../common/stores/notesModalStore";
 
 type NoteListProps = {
@@ -12,7 +13,8 @@ type NoteListProps = {
 };
 export default function NotesList({ notes }: NoteListProps) {
   const deleteDialogStore = useDeleteNoteDialogStore();
-  const editDialogStore = useEditNoteDialogStore();
+  const createDialogStore = useCreateNoteDialogStore();
+  const selectedNote = useSelectNoteAaction();
 
   return (
     <Grid
@@ -35,7 +37,8 @@ export default function NotesList({ notes }: NoteListProps) {
           <NotesCard
             note={note}
             onDelete={deleteDialogStore.toggleFn}
-            onEdit={editDialogStore.toggleFn}
+            selectNote={selectedNote}
+            onEdit={createDialogStore.toggleFn}
           />
         </Grid>
       ))}

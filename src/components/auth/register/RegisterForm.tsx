@@ -31,6 +31,7 @@ export default function RegisterForm() {
   const onSubmit: SubmitHandler<RegisterInput> = async (data, event) => {
     event?.preventDefault();
     registerMutation.mutate(data);
+    alert("R");
   };
   return (
     <Grid
@@ -39,22 +40,20 @@ export default function RegisterForm() {
       direction={"column"}
       onSubmit={handleSubmit(onSubmit)}
       gap={2}
-      xs={12}
-      md={4}
     >
       <FormInput
         label={"Email"}
         error={Boolean(errors.email)}
         variant="outlined"
         fullWidth
-        errorMsg={errors.email}
+        fielderror={errors.email}
         {...register("email")}
       />
       <FormInput
         label={"Password"}
         error={Boolean(errors.password)}
         variant="outlined"
-        errorMsg={errors.password}
+        fielderror={errors.password}
         fullWidth
         {...register("password")}
       />
@@ -62,7 +61,7 @@ export default function RegisterForm() {
         label={"Confirm Password"}
         error={Boolean(errors.confirmPassword)}
         variant="outlined"
-        errorMsg={errors.confirmPassword}
+        fielderror={errors.confirmPassword}
         {...register("confirmPassword")}
         fullWidth
       />

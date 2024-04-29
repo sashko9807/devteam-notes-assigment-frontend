@@ -13,7 +13,7 @@ type MobileNavProps = {
 };
 export default function MobileNav({ open, menuToggle }: MobileNavProps) {
   return (
-    <MobileNavMenuStyled>
+    <MobileNavMenuStyled id={"mobile-navigation"}>
       <Grid className={classes.container}>
         <SwipeableDrawer
           anchor="right"

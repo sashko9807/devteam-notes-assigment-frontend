@@ -52,7 +52,13 @@ export function AppNavbar() {
           </Grid>
         </Grid>
         <Grid className={classes.mobileMenu}>
-          <MobileNavToggleButton theme={theme} onClick={mobileNavMenuToggle}>
+          <MobileNavToggleButton
+            theme={theme}
+            onClick={mobileNavMenuToggle}
+            aria-label="menu"
+            aria-expanded={openNavMenu}
+            aria-controls="mobile-navigation"
+          >
             <Menu fontSize="large" />
           </MobileNavToggleButton>
           <MobileNav open={openNavMenu} menuToggle={mobileNavMenuToggle} />
