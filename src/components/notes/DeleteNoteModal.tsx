@@ -7,11 +7,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 
-import {
-  DeleteMutation,
-  NoteResponse,
-  useDeleteNote,
-} from "../../common/hooks/notes";
+import { DeleteMutation, useDeleteNote } from "../../common/hooks/notes";
 import { useAccessToken } from "../../common/stores/authStore";
 import { useRouter } from "@tanstack/react-router";
 import {
