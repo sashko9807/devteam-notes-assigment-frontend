@@ -5,6 +5,7 @@ import zod, { z } from "zod";
 import FormInput from "../../common/inputs/FormField";
 import { useLoginMutation } from "../../../common/hooks/auth";
 import { useRouter } from "@tanstack/react-router";
+import { routes } from "../../../common/routes";
 const loginSchema = zod.object({
   email: zod
     .string()
@@ -30,7 +31,7 @@ export default function LoginForm() {
     const result = await loginMutation.mutateAsync(data);
 
     if (result.status === 200) {
-      router.navigate({ to: "/dashboard" });
+      router.navigate({ to: routes.dashboard.index });
     }
   };
   return (

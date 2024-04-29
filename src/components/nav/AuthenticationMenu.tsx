@@ -5,6 +5,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import PersonIcon from "@mui/icons-material/Person";
 
 import StyledNavLink from "./StyledNavLink";
+import { routes } from "../../common/routes";
 
 export default function AuthenticationMenu() {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
@@ -46,12 +47,12 @@ export default function AuthenticationMenu() {
         }}
       >
         <MenuItem>
-          <StyledNavLink to="/login">
+          <StyledNavLink to={routes.auth.register}>
             <Typography>Login</Typography>
           </StyledNavLink>
         </MenuItem>
         <MenuItem>
-          <StyledNavLink to="/register">Register</StyledNavLink>
+          <StyledNavLink to={routes.auth.register}>Register</StyledNavLink>
         </MenuItem>
       </Menu>
     </>

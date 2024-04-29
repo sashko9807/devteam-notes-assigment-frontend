@@ -12,6 +12,7 @@ import { Menu } from "@mui/icons-material";
 import { useState } from "react";
 import MobileNav from "./MobileNavMenu";
 import theme from "../../common/theme";
+import { routes } from "../../common/routes";
 
 export function AppNavbar() {
   const [openNavMenu, setOpenNavMenu] = useState(false);
@@ -43,7 +44,7 @@ export function AppNavbar() {
           gap={2}
         >
           <Grid item component={"li"}>
-            <Button component={Link} to={"/dashboard"}>
+            <Button component={Link} to={routes.dashboard.index}>
               <Typography variant="body1">Dashboard</Typography>
             </Button>
           </Grid>
