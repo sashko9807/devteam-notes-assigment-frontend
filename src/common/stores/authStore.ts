@@ -1,43 +1,40 @@
 import { create } from "zustand";
-import { apiClient } from "../../api/apiClient";
-import { AxiosResponse } from "axios";
+import { useShallow } from "zustand/react/shallow";
 
-type LoginData = {
-  email: string;
-  password: string;
-};
+import { shallow } from "zustand/shallow";
 
-type LoginResponse = {
+export type LoginResponse = {
   accessToken: string;
 };
 
 type AuthActions = {
-  login: (data: LoginData) => void;
+  login: (data: LoginResponse) => void;
 };
 
-type AuthStore = {
+export interface AuthStore {
   accessToken: string;
   isAuthenticated: boolean;
   actions: AuthActions;
-};
+}
 
-const authStore = create<AuthStore>((set) => ({
+export const authStore = create<AuthStore>((set) => ({
   accessToken: "",
   isAuthenticated: false,
   actions: {
-    login: async (data: LoginData) => {
-      const response = await apiClient.post<
-        AxiosResponse<LoginResponse>,
-        AxiosResponse<LoginResponse>
-      >("user/login", data);
-      set(() => ({
-        accessToken: response.data.accessToken,
-        isAuthenticated: true,
-      }));
+    login: (data) => {
+      set({ isAuthenticated: true, accessToken: data.accessToken });
     },
   },
 }));
 
+export const useAuth = (): AuthStore =>
+  authStore(
+    useShallow((state) => ({
+      accessToken: state.accessToken,
+      isAuthenticated: state.isAuthenticated,
+      actions: state.actions,
+    }))
+  );
 export const useAccessToken = () => authStore((state) => state.accessToken);
 export const useIsAuthenticated = () =>
   authStore((state) => state.isAuthenticated);

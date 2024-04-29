@@ -21,7 +21,7 @@ export function AppNavbar() {
       position="fixed"
       className={classes.container}
       component={"nav"}
-      color="transparent"
+      color="default"
     >
       <Toolbar className={classes.wrapper}>
         <StyledNavLink to={"/"}>

@@ -3,6 +3,7 @@ import { Button, Grid } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import zod, { z } from "zod";
 import FormInput from "../../common/inputs/FormField";
+import { useLoginMutation } from "../../../common/hooks/auth";
 const loginSchema = zod.object({
   email: zod
     .string()
@@ -11,18 +12,20 @@ const loginSchema = zod.object({
   password: zod.string().min(1, "Password field is required"),
 });
 
-type LoginSchema = z.infer<typeof loginSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginSchema>({ resolver: zodResolver(loginSchema) });
+  } = useForm<LoginInput>({ resolver: zodResolver(loginSchema) });
 
-  const onSubmit: SubmitHandler<LoginSchema> = async (data, event) => {
+  const loginMutation = useLoginMutation();
+
+  const onSubmit: SubmitHandler<LoginInput> = async (data, event) => {
     event?.preventDefault();
-    console.log(data);
+    loginMutation.mutate(data);
   };
   return (
     <Grid

@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 
 import zod, { z } from "zod";
 import FormInput from "../../common/inputs/FormField";
+import { useRegisterMutation } from "../../../common/hooks/auth";
 
 const registerSchema = zod
   .object({
@@ -18,8 +19,9 @@ const registerSchema = zod
     message: "Passwords don't match",
     path: ["confirmPassword"],
   });
-type RegisterInput = z.infer<typeof registerSchema>;
+export type RegisterInput = z.infer<typeof registerSchema>;
 export default function RegisterForm() {
+  const registerMutation = useRegisterMutation();
   const {
     register,
     handleSubmit,
@@ -28,7 +30,7 @@ export default function RegisterForm() {
 
   const onSubmit: SubmitHandler<RegisterInput> = async (data, event) => {
     event?.preventDefault();
-    console.log(data);
+    registerMutation.mutate(data);
   };
   return (
     <Grid
