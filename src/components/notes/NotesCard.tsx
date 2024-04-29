@@ -11,7 +11,10 @@ type NoteCardProps = {
 
 export default function Note({ note, onEdit, onDelete }: NoteCardProps) {
   return (
-    <Card sx={{ position: "relative", height: "100%", width: "100%" }}>
+    <Card
+      sx={{ position: "relative", height: "100%", width: "100%" }}
+      component={"article"}
+    >
       <CardContent>
         <IconButton
           aria-label="edit"
