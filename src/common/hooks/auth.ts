@@ -14,7 +14,7 @@ export const register = async (data: RegisterInput) => {
 export function useRegisterMutation() {
   return useMutation({
     mutationFn: register,
-    onError(error, variables, context) {
+    onError(error) {
       console.log(error);
     },
   });
@@ -34,7 +34,7 @@ export function useLoginMutation() {
     onSuccess(data) {
       authActions.login(data.data);
     },
-    onError(error, variables, context) {
+    onError(error) {
       console.log(error);
     },
   });

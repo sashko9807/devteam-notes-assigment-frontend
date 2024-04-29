@@ -3,7 +3,7 @@ import { useIsAuthenticated } from "../common/stores/authStore";
 
 function IndexPage() {
   const isAuthenticated = useIsAuthenticated();
-  console.log(isAuthenticated);
+
   return <h1>{isAuthenticated.toString()}</h1>;
 }
 
