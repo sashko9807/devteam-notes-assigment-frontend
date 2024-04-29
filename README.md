@@ -1,30 +1,30 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## About
 
-Currently, two official plugins are available:
+Quickly done web application for taking notes.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## TODO
 
-## Expanding the ESLint configuration
+1. Switch to SSR. Should result in better SEO as well as performance
+2. Add component and e2e tests.
+3. Decrease bundle size, by offloading Modal resources for only when user needs them.
+4. Add abillity to search a Note based on title, or content
+5. Allow unregistered users to create notes locally, via local storages such as IndexDB or localStorage
+6. Refactor inline styles where used, in favour of class based styles, to improve code readability as well as performance.
+7. Overall UI and UX improvements.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Instructions
 
-- Configure the top-level `parserOptions` property like this:
+1. Setup the backend server as per(ss)
+2. Run `yarn install`
+3. Run `yarn dev`
+4. Go to Login page. If backend has been initiated successfully, user account should've been created with the following credentials:
 
 ```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+      email: "admin@notes-app.com",
+      password: "NoteApp",
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+5. Once logged user should be automatically redirected to /dashboard page, where notes could be added,updated or deleted.
+   _Note_: If logged in with the credentials above, there will be an already seeded notes for that user.
