@@ -50,7 +50,7 @@ export default function AuthenticationMenu() {
         }}
       >
         <MenuItem>
-          <StyledNavLink to={routes.auth.register}>
+          <StyledNavLink to={routes.auth.login}>
             <Typography>Login</Typography>
           </StyledNavLink>
         </MenuItem>
