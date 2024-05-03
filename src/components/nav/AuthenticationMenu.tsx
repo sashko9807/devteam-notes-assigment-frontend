@@ -1,8 +1,11 @@
 import { Button, Menu, MenuItem, Typography } from "@mui/material";
 import React, { useState } from "react";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import PersonIcon from "@mui/icons-material/Person";
+
+import {
+  Person as PersonIcon,
+  ArrowDropUp as ArrowDropUpIcon,
+  ArrowDropDown as ArrowDropDownIcon,
+} from "@mui/icons-material";
 
 import StyledNavLink from "./StyledNavLink";
 import { routes } from "../../common/routes";
@@ -32,7 +35,7 @@ export default function AuthenticationMenu() {
       </Button>
       <Menu
         disableScrollLock={true}
-        open={Boolean(anchorEl)}
+        open={open}
         keepMounted
         id="menu-appbar"
         anchorEl={anchorEl}

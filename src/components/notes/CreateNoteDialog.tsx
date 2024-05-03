@@ -13,7 +13,7 @@ import {
   useCreateNoteMutation,
   useUpdateNoteMutation,
 } from "../../common/hooks/notes";
-import FormInput from "../common/inputs/FormField";
+import FormInput from "../nav/common/inputs/FormField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import zod, { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";

@@ -1,6 +1,6 @@
 import { Box, TextField, TextFieldProps, Typography } from "@mui/material";
 import React from "react";
-import theme from "../../../common/theme";
+import theme from "../../../../common/theme";
 import { FieldError } from "react-hook-form";
 
 type FormInput = TextFieldProps & {

@@ -3,7 +3,7 @@ import { Button, Grid } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import zod, { z } from "zod";
-import FormInput from "../../common/inputs/FormField";
+import FormInput from "../../nav/common/inputs/FormField";
 import { useRegisterMutation } from "../../../common/hooks/auth";
 
 const registerSchema = zod
