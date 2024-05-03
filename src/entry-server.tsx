@@ -16,6 +16,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CacheProvider, ThemeProvider } from "@emotion/react";
 import theme from "./common/theme";
 import createEmotionCache from "./common/createEmotionCache";
+import { transformStreamWithEmotion } from "./utils/transformReadableStreamWithEmotion";
 
 type ReactReadableStream = ReadableStream<Uint8Array> & {
   allReady?: Promise<void> | undefined;

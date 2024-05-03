@@ -25,6 +25,7 @@ function RootComponent() {
             `,
           }}
         />
+        <meta name="emotion-insertion-point" content="" />
         <script type="module" src="/@vite/client" />
         <script type="module" src="/src/entry-client.tsx" />
       </head>
