@@ -1,19 +1,20 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { notesQueryOptions } from "../../common/hooks/notes";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useAccessToken } from "../../common/stores/authStore";
+
 import { Button, Divider, Grid, Typography } from "@mui/material";
 
 import NotesList from "../../components/notes/NotesList";
 import { useCreateNoteDialogStore } from "../../common/stores/notesModalStore";
 import DeleteNoteModal from "../../components/notes/DeleteNoteModal";
 import CreateNoteDialog from "../../components/notes/CreateNoteDialog";
+import { useAuthStore } from "../../components/auth/AuthStoreProvider";
 
 function DashboardPage() {
-  const accessToken = useAccessToken();
+  const { accessToken } = useAuthStore((state) => state);
   const notesQuery = useSuspenseQuery(notesQueryOptions(accessToken));
   const createDialogStore = useCreateNoteDialogStore();
-  const notes = notesQuery.data.data;
+  const notes = notesQuery.data;
 
   return (
     <Grid container direction="column" spacing={2} py={5} px={3}>
@@ -40,11 +41,12 @@ function DashboardPage() {
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardPage,
-  loader: ({ context: { queryClient, auth } }) => {
-    const accessToken = auth.accessToken;
-    if (!auth.isAuthenticated) {
-      throw redirect({ to: "/login" });
-    }
-    return queryClient.ensureQueryData(notesQueryOptions(accessToken));
+  beforeLoad(opts) {
+    return opts;
+  },
+  loader: ({ context }) => {
+    return context.queryClient.ensureQueryData(
+      notesQueryOptions(context.auth.accessToken)
+    );
   },
 });

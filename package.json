@@ -23,6 +23,7 @@
     "@tanstack/react-router-server": "^1.31.9",
     "add": "^2.0.6",
     "axios": "^1.6.8",
+    "cookie-parser": "^1.4.6",
     "express": "^4.19.2",
     "isbot": "^5.1.6",
     "node-fetch": "^3.3.2",

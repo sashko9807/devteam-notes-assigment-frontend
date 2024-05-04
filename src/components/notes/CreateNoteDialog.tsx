@@ -22,7 +22,7 @@ import {
   useCreateNoteDialogStore,
   useSelectedNote,
 } from "../../common/stores/notesModalStore";
-import { useAccessToken } from "../../common/stores/authStore";
+import { useAuthStore } from "../auth/AuthStoreProvider";
 
 const createNoteSchema = zod.object({
   title: zod.string().min(1, "Title field is required"),
@@ -33,7 +33,7 @@ export type CreateNoteInput = z.infer<typeof createNoteSchema>;
 
 export default function CreateNoteDialog() {
   const selectedNote = useSelectedNote();
-  const accessToken = useAccessToken();
+  const accessToken = useAuthStore((state) => state.accessToken);
   const isNewNote = Boolean(selectedNote.id);
   const createDialogStore = useCreateNoteDialogStore();
   const {

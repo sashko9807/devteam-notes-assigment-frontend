@@ -9,6 +9,7 @@ export const endpoints = {
   auth: {
     login: <Endpoint>{ url: "/user/login", method: "POST" },
     register: <Endpoint>{ url: "/user/register", method: "POST" },
+    refresh: <Endpoint>{ url: "/user/refresh-token", method: "POST" },
   },
   notes: {
     get: <Endpoint>{ url: "/notes/", method: "GET" },

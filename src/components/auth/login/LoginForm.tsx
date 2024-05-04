@@ -30,9 +30,9 @@ export default function LoginForm() {
     event?.preventDefault();
     const result = await loginMutation.mutateAsync(data);
 
-    if (result.status === 200) {
-      router.navigate({ to: routes.dashboard.index });
-    }
+    // if (result.status === 200) {
+    //   router.navigate({ to: routes.dashboard.index });
+    // }
   };
   return (
     <Grid

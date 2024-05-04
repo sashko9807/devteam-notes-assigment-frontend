@@ -7,6 +7,7 @@ import { apiClient, authConfig } from "../../api/apiClient";
 import { endpoints } from "../apiEndpoints";
 
 import { AxiosError, AxiosResponse } from "axios";
+import { useAuthStore } from "../../components/auth/AuthStoreProvider";
 
 export type NoteResponse = {
   id: string;
@@ -22,13 +23,14 @@ async function fetchNotes(accessToken: string) {
     authConfig(accessToken)
   );
 
-  return response;
+  return response.data;
 }
 
-export const notesQueryOptions = (token: string) => {
-  return queryOptions<AxiosResponse<NoteResponse[]>>({
+export const notesQueryOptions = (accessToken: string) => {
+  return queryOptions<NoteResponse[]>({
     queryKey: ["notes"],
-    queryFn: () => fetchNotes(token),
+    queryFn: () => fetchNotes(accessToken),
+    retry: false,
   });
 };
 
@@ -60,34 +62,31 @@ export type CreateNoteVariables = {
   content: string;
   accessToken: string;
 };
-async function createNote(data: CreateNoteVariables) {
-  const { accessToken, ...noteData } = data;
-
+async function createNote(accessToken: string, data: CreateNoteVariables) {
   return await apiClient.post(
     endpoints.notes.create.url,
-    noteData,
+    data,
     authConfig(accessToken)
   );
 }
 
-async function updateNote(data: CreateNoteVariables) {
-  const { accessToken, ...noteData } = data;
-
+async function updateNote(accessToken: string, data: CreateNoteVariables) {
   return await apiClient.put(
-    endpoints.notes.update(noteData.id).url,
-    noteData,
+    endpoints.notes.update(data.id).url,
+    data,
     authConfig(accessToken)
   );
 }
 
 export const useCreateNoteMutation = () => {
   const queryClient = useQueryClient();
+  const accessToken = useAuthStore((state) => state.accessToken);
   return useMutation<
     AxiosResponse<NoteResponse>,
     AxiosError,
     CreateNoteVariables
   >({
-    mutationFn: createNote,
+    mutationFn: (data) => createNote(accessToken, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
     },
@@ -95,13 +94,14 @@ export const useCreateNoteMutation = () => {
 };
 
 export const useUpdateNoteMutation = () => {
+  const accessToken = useAuthStore((state) => state.accessToken);
   const queryClient = useQueryClient();
   return useMutation<
     AxiosResponse<NoteResponse>,
     AxiosError,
     CreateNoteVariables
   >({
-    mutationFn: updateNote,
+    mutationFn: (data) => updateNote(accessToken, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
     },

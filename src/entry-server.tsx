@@ -18,6 +18,12 @@ import theme from "./common/theme";
 import createEmotionCache from "./common/createEmotionCache";
 import { transformStreamWithEmotion } from "./utils/transformReadableStreamWithEmotion";
 
+import { apiClient } from "./api/apiClient";
+import { endpoints } from "./common/apiEndpoints";
+import { AxiosError } from "axios";
+import { refreshToken } from "./common/utils/refreshToken";
+import { AuthStoreProviders } from "./components/auth/AuthStoreProvider";
+
 type ReactReadableStream = ReadableStream<Uint8Array> & {
   allReady?: Promise<void> | undefined;
 };
@@ -29,19 +35,40 @@ export async function render(opts: {
   res: ServerResponse;
 }) {
   const router = createRouter();
-  const queryClient = new QueryClient();
   const cache = createEmotionCache();
+  const cookies = opts.req.cookies;
 
+  // const authHeader = opts.req.headers.Authorization as string;
   const memoryHistory = createMemoryHistory({
     initialEntries: [opts.url],
   });
 
+  const authContext = {
+    auth: {
+      isAuthenticated: false,
+      accessToken: "",
+    },
+  };
+  if (cookies.jwt) {
+    const accessTokenRes = await apiClient.post(
+      endpoints.auth.refresh.url,
+      undefined,
+      {
+        headers: { Cookie: `jwt=${cookies.jwt}` },
+        withCredentials: true,
+      }
+    );
+    authContext.auth.accessToken = accessTokenRes.data.accessToken;
+  }
   // Update the history and context
   router.update({
     history: memoryHistory,
     context: {
-      queryClient: queryClient,
-      auth: undefined!,
+      queryClient: router.options.context.queryClient,
+      auth: {
+        isAuthenticated: cookies.jwt ? true : false,
+        accessToken: authContext.auth.accessToken,
+      },
       head: opts.head,
     },
   });
@@ -63,13 +90,18 @@ export async function render(opts: {
 
   await new Promise<void>((resolve) => {
     stream = ReactDOMServer.renderToPipeableStream(
-      <CacheProvider value={cache}>
-        <QueryClientProvider client={queryClient}>
+      <AuthStoreProviders
+        init={{
+          isAuthenticated: router.options.context.auth.isAuthenticated,
+          accessToken: router.options.context.auth.accessToken,
+        }}
+      >
+        <CacheProvider value={cache}>
           <ThemeProvider theme={theme}>
             <StartServer router={router} />
           </ThemeProvider>
-        </QueryClientProvider>
-      </CacheProvider>,
+        </CacheProvider>
+      </AuthStoreProviders>,
       {
         [callbackName]: () => {
           resolve();
@@ -88,7 +120,10 @@ export async function render(opts: {
   opts.res.setHeader("Content-Type", "text/html");
 
   // Add our Router transform to the stream
-  const transforms = [transformStreamWithRouter(router)];
+  const transforms = [
+    transformStreamWithRouter(router),
+    transformStreamWithEmotion(cache),
+  ];
 
   const transformedStream = transforms.reduce(
     (stream, transform) => stream.pipe(transform as any),

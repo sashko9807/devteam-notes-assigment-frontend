@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useIsAuthenticated } from "../common/stores/authStore";
+import { useAuthStore } from "../components/auth/AuthStoreProvider";
+import { TAuthStore } from "../common/stores/authStore";
 
 function IndexPage() {
-  const isAuthenticated = useIsAuthenticated();
-
-  return <h1>{isAuthenticated.toString()}</h1>;
+  const { isAuthenticated } = useAuthStore<TAuthStore>((state) => state);
+  return <h1>{`${isAuthenticated}`}</h1>;
 }
 
 export const Route = createFileRoute("/")({

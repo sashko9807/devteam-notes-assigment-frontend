@@ -8,17 +8,18 @@ import {
 } from "@mui/material";
 
 import { DeleteMutation, useDeleteNote } from "../../common/hooks/notes";
-import { useAccessToken } from "../../common/stores/authStore";
+
 import { useRouter } from "@tanstack/react-router";
 import {
   useDeleteNoteDialogStore,
   useSelectedNote,
 } from "../../common/stores/notesModalStore";
+import { useAuthStore } from "../auth/AuthStoreProvider";
 
 export default function DeleteNoteModal() {
   const deleteNoteMutation = useDeleteNote();
   const router = useRouter();
-  const accessToken = useAccessToken();
+  const accessToken = useAuthStore((state) => state.accessToken);
   const deleteModalStore = useDeleteNoteDialogStore();
   const selectedNote = useSelectedNote();
   function deleteNote() {

@@ -2,8 +2,9 @@ import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { AppNavbar } from "../components/nav/AppNavbar";
 import { Box } from "@mui/material";
 import { QueryClient } from "@tanstack/react-query";
-import { AuthStore } from "../common/stores/authStore";
+
 import { DehydrateRouter } from "@tanstack/react-router-server";
+import { TAuthStore } from "../common/stores/authStore";
 
 function RootComponent() {
   return (
@@ -44,8 +45,9 @@ function RootComponent() {
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
-  auth: AuthStore;
+  auth: Omit<TAuthStore, "login">;
   head: string;
 }>()({
   component: RootComponent,
+  beforeLoad: ({ context }) => {},
 });

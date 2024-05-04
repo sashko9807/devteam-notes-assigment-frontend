@@ -4,8 +4,9 @@ import type { RegisterInput } from "../../components/auth/register/RegisterForm"
 
 import { endpoints } from "../apiEndpoints";
 import { LoginInput } from "../../components/auth/login/LoginForm";
-import { LoginResponse, useAuthActions } from "../stores/authStore";
+import { LoginResponse } from "../stores/authStore";
 import { AxiosError, AxiosResponse } from "axios";
+import { useAuthStore } from "../../components/auth/AuthStoreProvider";
 
 export const register = async (data: RegisterInput) => {
   return await apiClient.post<RegisterInput>(endpoints.auth.register.url, data);
@@ -28,7 +29,7 @@ export const login = async (data: LoginInput) => {
 };
 
 export function useLoginMutation() {
-  const authActions = useAuthActions();
+  const authActions = useAuthStore((state) => state);
   return useMutation<AxiosResponse<LoginResponse>, AxiosError, LoginInput>({
     mutationFn: login,
     onSuccess(data) {

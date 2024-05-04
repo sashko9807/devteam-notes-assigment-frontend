@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser'
 import express from 'express'
 import getPort, { portNumbers } from 'get-port'
 
@@ -36,6 +37,7 @@ export async function createServer(
     })
     // use vite's connect instance as middleware
     app.use(vite.middlewares)
+    app.use(cookieParser())
   } else {
     app.use((await import('compression')).default())
   }

@@ -8,7 +8,7 @@ export function transformStreamWithEmotion(cache: EmotionCache) {
   const { extractCriticalToChunks, constructStyleTagsFromChunks } =
     createEmotionServer(cache);
   return new Transform({
-    transform(chunk, encoding, callback) {
+    transform(chunk, _encoding, callback) {
       const chunkString = textDecoder.decode(chunk);
 
       const html = textDecoder.decode(chunk);

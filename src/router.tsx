@@ -1,21 +1,52 @@
-import { createRouter as createReactRouter } from "@tanstack/react-router";
+import {
+  AnyRouter,
+  createRouter as createReactRouter,
+} from "@tanstack/react-router";
 
 import { routeTree } from "./routeTree.gen";
 import SuperJSON from "superjson";
-import { QueryClient } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  dehydrate,
+  hydrate,
+} from "@tanstack/react-query";
 
 export function createRouter() {
   const queryClient = new QueryClient();
-  return createReactRouter({
+  const router: AnyRouter = createReactRouter({
     routeTree,
     context: {
       queryClient,
-      auth: undefined!,
+      auth: {
+        accessToken: "",
+        isAuthenticated: false,
+      },
       head: "",
     },
-    defaultPreload: "intent",
+    dehydrate: () => {
+      return {
+        accessToken: router.options.context.auth.accessToken,
+        isAuthenticated: router.options.context.auth.isAuthenticated,
+        queryClientState: dehydrate(queryClient),
+      };
+    },
+    hydrate: (data) => {
+      router.options.context.auth.accessToken = data.accessToken;
+      router.options.context.auth.isAuthenticated = data.isAuthenticated;
+      hydrate(queryClient, data.queryClientState);
+    },
+    Wrap({ children }) {
+      return (
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
+      );
+    },
     transformer: SuperJSON,
   });
+
+  return router;
 }
 
 declare module "@tanstack/react-router" {
