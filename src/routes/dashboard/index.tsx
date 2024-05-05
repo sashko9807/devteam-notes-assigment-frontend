@@ -49,4 +49,8 @@ export const Route = createFileRoute("/dashboard/")({
       notesQueryOptions(context.auth.accessToken)
     );
   },
+  staticData: {
+    title: "Dashboard",
+    description: "Manage your notes here",
+  },
 });

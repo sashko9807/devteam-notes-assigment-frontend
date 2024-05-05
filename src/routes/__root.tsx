@@ -1,4 +1,8 @@
-import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
+import {
+  createRootRouteWithContext,
+  Outlet,
+  useMatches,
+} from "@tanstack/react-router";
 import { AppNavbar } from "../components/nav/AppNavbar";
 import { Box } from "@mui/material";
 import { QueryClient } from "@tanstack/react-query";
@@ -6,13 +10,27 @@ import { QueryClient } from "@tanstack/react-query";
 import { DehydrateRouter } from "@tanstack/react-router-server";
 import { TAuthStore } from "../common/stores/authStore";
 
+function getTitle(title: string, suffix = "Note App") {
+  if (title) {
+    return `${title} | ${suffix}`;
+  }
+  return suffix;
+}
+
 function RootComponent() {
+  const matches = useMatches();
+  const { title, description } = matches[1].staticData;
+  const pageTitle = getTitle(title);
+
   return (
     <html lang="en">
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Vite App</title>
+        <title>{pageTitle}</title>
+        <meta name="description" content={description ?? pageTitle} />
+        <meta name="og:description" content={description ?? pageTitle} />
+
         <script
           type="module"
           suppressHydrationWarning
@@ -49,5 +67,8 @@ export const Route = createRootRouteWithContext<{
   head: string;
 }>()({
   component: RootComponent,
-  beforeLoad: ({ context }) => {},
+  staticData: {
+    title: "Note App - Manage your own notes",
+    description: "Note App is web application, helping you to manage notes",
+  },
 });

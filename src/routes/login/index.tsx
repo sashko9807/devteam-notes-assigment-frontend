@@ -24,4 +24,8 @@ const LoginPage = () => {
 };
 export const Route = createFileRoute("/login/")({
   component: LoginPage,
+  staticData: {
+    title: "Login",
+    description: "Login in your profile",
+  },
 });

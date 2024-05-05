@@ -28,4 +28,8 @@ function RegisterPage() {
 
 export const Route = createFileRoute("/register/")({
   component: RegisterPage,
+  staticData: {
+    title: "Register",
+    description: "Create new profile",
+  },
 });
