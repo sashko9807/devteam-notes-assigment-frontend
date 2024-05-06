@@ -51,6 +51,8 @@ export const Route = createFileRoute("/dashboard/")({
   },
   staticData: {
     title: "Dashboard",
+    metaTitle: "Dashbord",
     description: "Manage your notes here",
+    metaDescription: "Manage your notes here",
   },
 });

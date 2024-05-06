@@ -1,4 +1,3 @@
-import * as React from "react";
 import ReactDOM from "react-dom/client";
 
 import { StartClient } from "@tanstack/react-router-server/client";
@@ -28,5 +27,8 @@ function App() {
   );
 }
 
+router.update({
+  context: { ...router.options.context, head: "123" },
+});
 router.hydrate();
 ReactDOM.hydrateRoot(document, <App />);

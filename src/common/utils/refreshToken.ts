@@ -1,7 +1,5 @@
-import { AxiosError } from "axios";
 import { apiClient } from "../../api/apiClient";
 import { endpoints } from "../apiEndpoints";
-import { useAuthStore } from "../stores/authStore";
 
 export async function refreshToken(cookies: any) {
   const response = await apiClient.post(endpoints.auth.refresh.url, undefined, {

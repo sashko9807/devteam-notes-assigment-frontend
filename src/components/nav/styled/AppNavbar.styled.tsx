@@ -3,8 +3,8 @@ import {
   AppBarProps,
   IconButton,
   IconButtonProps,
+  styled,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 
 export const classes = {
   container: `AppBar--container`,

@@ -1,7 +1,4 @@
-import { create, createStore } from "zustand";
-import { useShallow } from "zustand/react/shallow";
-
-import { shallow } from "zustand/shallow";
+import { createStore } from "zustand";
 
 export type AuthState = {
   accessToken: string;
@@ -26,7 +23,7 @@ export const createAuthStore = (initState: AuthState = defaultInitState) => {
   return createStore<TAuthStore>()((set) => ({
     ...initState,
     login: (data) =>
-      set((state) => ({
+      set(() => ({
         isAuthenticated: true,
         accessToken: data.accessToken,
       })),

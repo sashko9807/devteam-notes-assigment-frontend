@@ -31,5 +31,7 @@ export const Route = createFileRoute("/register/")({
   staticData: {
     title: "Register",
     description: "Create new profile",
+    metaTitle: "Register",
+    metaDescription: "Create new profile",
   },
 });

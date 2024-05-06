@@ -22,16 +22,21 @@ export function createRouter() {
         accessToken: "",
         isAuthenticated: false,
       },
+      scriptSrc: "",
       head: "",
     },
     dehydrate: () => {
       return {
+        head: router.options.context.head,
+        scriptSrc: router.options.context.scriptSrc,
         accessToken: router.options.context.auth.accessToken,
         isAuthenticated: router.options.context.auth.isAuthenticated,
         queryClientState: dehydrate(queryClient),
       };
     },
     hydrate: (data) => {
+      router.options.context.scriptSrc = data.scriptSrc;
+      router.options.context.head = data.head;
       router.options.context.auth.accessToken = data.accessToken;
       router.options.context.auth.isAuthenticated = data.isAuthenticated;
       hydrate(queryClient, data.queryClientState);
@@ -56,5 +61,7 @@ declare module "@tanstack/react-router" {
   interface StaticDataRouteOption {
     title: string;
     description: string;
+    metaTitle: string;
+    metaDescription: string;
   }
 }

@@ -1,6 +1,9 @@
-import * as React from "react";
 import ReactDOMServer, { PipeableStream } from "react-dom/server";
-import { createMemoryHistory } from "@tanstack/react-router";
+import {
+  createMemoryHistory,
+  useMatch,
+  useMatches,
+} from "@tanstack/react-router";
 import {
   StartServer,
   transformStreamWithRouter,
@@ -12,21 +15,19 @@ import express from "express";
 // index.js
 import "./fetch-polyfill";
 import { createRouter } from "./router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import { CacheProvider, ThemeProvider } from "@emotion/react";
 import theme from "./common/theme";
 import createEmotionCache from "./common/createEmotionCache";
-import { transformStreamWithEmotion } from "./utils/transformReadableStreamWithEmotion";
+import {
+  transformStreamWithDynamicMetadata,
+  transformStreamWithEmotion,
+} from "./utils/transformReadableStreamWithEmotion";
 
 import { apiClient } from "./api/apiClient";
 import { endpoints } from "./common/apiEndpoints";
-import { AxiosError } from "axios";
-import { refreshToken } from "./common/utils/refreshToken";
-import { AuthStoreProviders } from "./components/auth/AuthStoreProvider";
 
-type ReactReadableStream = ReadableStream<Uint8Array> & {
-  allReady?: Promise<void> | undefined;
-};
+import { AuthStoreProviders } from "./components/auth/AuthStoreProvider";
 
 export async function render(opts: {
   url: string;
@@ -35,10 +36,10 @@ export async function render(opts: {
   res: ServerResponse;
 }) {
   const router = createRouter();
+
   const cache = createEmotionCache();
   const cookies = opts.req.cookies;
-
-  // const authHeader = opts.req.headers.Authorization as string;
+  const refreshToken = cookies?.jwt;
   const memoryHistory = createMemoryHistory({
     initialEntries: [opts.url],
   });
@@ -49,16 +50,16 @@ export async function render(opts: {
       accessToken: "",
     },
   };
-  if (cookies.jwt) {
+  if (refreshToken) {
     const accessTokenRes = await apiClient.post(
       endpoints.auth.refresh.url,
       undefined,
       {
-        headers: { Cookie: `jwt=${cookies.jwt}` },
+        headers: { Cookie: `jwt=${refreshToken}` },
         withCredentials: true,
       }
     );
-    authContext.auth.accessToken = accessTokenRes.data.accessToken;
+    authContext.auth.accessToken = accessTokenRes?.data?.accessToken ?? "";
   }
   // Update the history and context
   router.update({
@@ -66,7 +67,7 @@ export async function render(opts: {
     context: {
       queryClient: router.options.context.queryClient,
       auth: {
-        isAuthenticated: cookies.jwt ? true : false,
+        isAuthenticated: refreshToken ? true : false,
         accessToken: authContext.auth.accessToken,
       },
       head: opts.head,
@@ -76,6 +77,11 @@ export async function render(opts: {
   // Wait for the router to load critical data
   // (streamed data will continue to load in the background)
   await router.load();
+
+  const routeMatches = router.matchRoutes(
+    router.latestLocation.href,
+    router.latestLocation.href
+  );
 
   // Track errors
   let statusCode = 200;
@@ -123,6 +129,7 @@ export async function render(opts: {
   const transforms = [
     transformStreamWithRouter(router),
     transformStreamWithEmotion(cache),
+    transformStreamWithDynamicMetadata(routeMatches),
   ];
 
   const transformedStream = transforms.reduce(

@@ -1,8 +1,10 @@
 import cookieParser from 'cookie-parser'
 import express from 'express'
 import getPort, { portNumbers } from 'get-port'
+import fs from 'node:fs/promises';
 
 const isTest = process.env.NODE_ENV === 'test' || !!process.env.VITE_TEST_BUILD
+
 
 export async function createServer(
   root = process.cwd(),
@@ -11,6 +13,13 @@ export async function createServer(
 ) {
   const app = express()
 
+  const prodIndexHtml = isProd
+    ? await fs.readFile('./dist/client/index.html', 'utf-8')
+    : '';
+
+  const ssrManifest = isProd
+    ? await fs.readFile('./dist/client/.vite/ssr-manifest.json', 'utf-8')
+    : undefined
   /**
    * @type {import('vite').ViteDevServer}
    */
@@ -37,11 +46,12 @@ export async function createServer(
     })
     // use vite's connect instance as middleware
     app.use(vite.middlewares)
-    app.use(cookieParser())
   } else {
+    const sirv = (await import('sirv')).default
+    app.use('/', sirv('./dist/client', { extensions: [] }))
     app.use((await import('compression')).default())
   }
-
+  app.use(cookieParser())
   app.use('*', async (req, res) => {
     try {
       const url = req.originalUrl
@@ -53,13 +63,14 @@ export async function createServer(
         return
       }
 
-      // Extract the head from vite's index transformation hook
+      const template = await fs.readFile('./index.html', 'utf-8')
       let viteHead = !isProd
         ? await vite.transformIndexHtml(
           url,
-          `<html><head></head><body></body></html>`,
+          template,
         )
-        : ''
+        : prodIndexHtml
+
 
       viteHead = viteHead.substring(
         viteHead.indexOf('<head>') + 6,
@@ -70,11 +81,11 @@ export async function createServer(
         if (!isProd) {
           return vite.ssrLoadModule('/src/entry-server.tsx')
         } else {
-          return import('./dist/server/entry-server.tsx')
+          return import('./dist/server/entry-server.js')
         }
       })()
 
-      console.log('Rendering: ', url, '...')
+
       entry.render({ req, res, url, head: viteHead })
     } catch (e) {
       !isProd && vite.ssrFixStacktrace(e)

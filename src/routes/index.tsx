@@ -9,4 +9,13 @@ function IndexPage() {
 
 export const Route = createFileRoute("/")({
   component: IndexPage,
+  meta: () => {
+    return [{ title: "Note App" }];
+  },
+  staticData: {
+    title: "Note App - Manage your own notes",
+    description: "Note App is web application, helping you to manage notes",
+    metaTitle: "Note App",
+    metaDescription: "Note App is web application, helping you to manage notes",
+  },
 });
