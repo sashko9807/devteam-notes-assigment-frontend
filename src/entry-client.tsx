@@ -6,6 +6,7 @@ import { CacheProvider, ThemeProvider } from "@emotion/react";
 import createEmotionCache from "./common/createEmotionCache";
 import theme from "./common/theme";
 import { AuthStoreProviders } from "./components/auth/AuthStoreProvider";
+import { CssBaseline } from "@mui/material";
 
 const router = createRouter();
 const cache = createEmotionCache();
@@ -21,6 +22,7 @@ function App() {
       <CacheProvider value={cache}>
         <ThemeProvider theme={theme}>
           <StartClient router={router} />
+          <CssBaseline />
         </ThemeProvider>
       </CacheProvider>
     </AuthStoreProviders>

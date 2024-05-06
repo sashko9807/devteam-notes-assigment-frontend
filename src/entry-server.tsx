@@ -24,6 +24,7 @@ import { apiClient } from "./api/apiClient";
 import { endpoints } from "./common/apiEndpoints";
 
 import { AuthStoreProviders } from "./components/auth/AuthStoreProvider";
+import { CssBaseline } from "@mui/material";
 
 export async function render(opts: {
   url: string;
@@ -101,6 +102,7 @@ export async function render(opts: {
         <CacheProvider value={cache}>
           <ThemeProvider theme={theme}>
             <StartServer router={router} />
+            <CssBaseline />
           </ThemeProvider>
         </CacheProvider>
       </AuthStoreProviders>,
