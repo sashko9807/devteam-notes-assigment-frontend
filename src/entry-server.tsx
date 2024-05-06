@@ -1,9 +1,5 @@
 import ReactDOMServer, { PipeableStream } from "react-dom/server";
-import {
-  createMemoryHistory,
-  useMatch,
-  useMatches,
-} from "@tanstack/react-router";
+import { createMemoryHistory } from "@tanstack/react-router";
 import {
   StartServer,
   transformStreamWithRouter,
