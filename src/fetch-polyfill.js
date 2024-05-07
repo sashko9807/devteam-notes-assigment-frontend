@@ -1,12 +1,5 @@
 // fetch-polyfill.js
 import fetch, {
-    Blob,
-    blobFrom,
-    blobFromSync,
-    File,
-    fileFrom,
-    fileFromSync,
-    FormData,
     Headers,
     Request,
     Response,

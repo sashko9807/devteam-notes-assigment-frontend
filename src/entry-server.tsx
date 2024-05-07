@@ -15,10 +15,7 @@ import { createRouter } from "./router";
 import { CacheProvider, ThemeProvider } from "@emotion/react";
 import theme from "./common/theme";
 import createEmotionCache from "./common/createEmotionCache";
-import {
-  transformStreamWithDynamicMetadata,
-  transformStreamWithEmotion,
-} from "./utils/transformReadableStreamWithEmotion";
+import { transformStreamWithEmotion } from "./utils/transformReadableStreamWithEmotion";
 
 import { apiClient } from "./api/apiClient";
 import { endpoints } from "./common/apiEndpoints";
@@ -33,7 +30,20 @@ export async function render(opts: {
   res: ServerResponse;
 }) {
   const router = createRouter();
-
+  let scriptSrc = "";
+  if (process.env.NODE_ENV !== "production") {
+    scriptSrc = "/src/entry-client.tsx";
+  } else {
+    //Hacky solution for getting src of production code
+    const scriptsRegex = /<script\b[^>]*>[\s\S]*?<\/script\b[^>]*>/g;
+    const templateScript = opts.head.match(scriptsRegex);
+    if (templateScript) {
+      scriptSrc = templateScript[0].substring(
+        templateScript[0].indexOf('src="') + 5,
+        templateScript[0].indexOf('">')
+      );
+    }
+  }
   const cache = createEmotionCache();
   const cookies = opts.req.cookies;
   const refreshToken = cookies?.jwt;
@@ -67,18 +77,15 @@ export async function render(opts: {
         isAuthenticated: refreshToken ? true : false,
         accessToken: authContext.auth.accessToken,
       },
+
       head: opts.head,
+      scriptSrc: scriptSrc,
     },
   });
 
   // Wait for the router to load critical data
   // (streamed data will continue to load in the background)
   await router.load();
-
-  const routeMatches = router.matchRoutes(
-    router.latestLocation.href,
-    router.latestLocation.href
-  );
 
   // Track errors
   let statusCode = 200;
@@ -127,7 +134,6 @@ export async function render(opts: {
   const transforms = [
     transformStreamWithRouter(router),
     transformStreamWithEmotion(cache),
-    transformStreamWithDynamicMetadata(routeMatches),
   ];
 
   const transformedStream = transforms.reduce(
