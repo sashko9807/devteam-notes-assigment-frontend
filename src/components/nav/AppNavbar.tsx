@@ -18,12 +18,7 @@ export function AppNavbar() {
   const [openNavMenu, setOpenNavMenu] = useState(false);
   const mobileNavMenuToggle = () => setOpenNavMenu((prev) => !prev);
   return (
-    <AppBarStyled
-      position="fixed"
-      className={classes.container}
-      component={"nav"}
-      color="default"
-    >
+    <AppBarStyled position="fixed" component={"nav"} color="default">
       <Toolbar className={classes.wrapper}>
         <StyledNavLink to={"/"}>
           <Typography

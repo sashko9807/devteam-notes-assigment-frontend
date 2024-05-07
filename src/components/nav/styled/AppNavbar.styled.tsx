@@ -19,10 +19,6 @@ export const AppBarStyled = styled(AppBar)<AppBarProps>(({ theme }) => ({
     overflow: "hidden",
     alignItems: "center",
     width: "100%",
-    height: theme.spacing(11),
-    [theme.breakpoints.down("sm")]: {
-      height: theme.spacing(8),
-    },
     backgroundColor: "#fff",
   },
   [`& .${classes.wrapper}`]: {
