@@ -15,7 +15,6 @@ import { createRouter } from "./router";
 import { CacheProvider, ThemeProvider } from "@emotion/react";
 import theme from "./common/theme";
 import createEmotionCache from "./common/createEmotionCache";
-import { transformStreamWithEmotion } from "./utils/transformReadableStreamWithEmotion";
 
 import { apiClient } from "./api/apiClient";
 import { endpoints } from "./common/apiEndpoints";
@@ -131,10 +130,7 @@ export async function render(opts: {
   opts.res.setHeader("Content-Type", "text/html");
 
   // Add our Router transform to the stream
-  const transforms = [
-    transformStreamWithRouter(router),
-    transformStreamWithEmotion(cache),
-  ];
+  const transforms = [transformStreamWithRouter(router)];
 
   const transformedStream = transforms.reduce(
     (stream, transform) => stream.pipe(transform as any),
