@@ -1,7 +1,6 @@
 import {
   createRootRouteWithContext,
   Outlet,
-  useMatches,
   useRouter,
   useRouterState,
 } from "@tanstack/react-router";
@@ -29,6 +28,8 @@ function RootComponent() {
   return (
     <html lang="en">
       <head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{pageTitle}</title>
         <meta name="description" content={meta.description ?? pageTitle} />
         <meta
